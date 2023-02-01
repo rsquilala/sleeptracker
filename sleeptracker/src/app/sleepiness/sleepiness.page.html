@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Sleepiness</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Log sleepiness throughout the day -->
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Your Sleepiness Data</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Take a look at your recorded sleepiness scale data throughout the day
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list class="bg-transparent">
+    <ion-item-sliding *ngFor="let sleepiness_data of allSleepinessData">
+      <ion-item color="none" lines="none">
+        <ion-card class="item-fill-space">
+          <ion-card-content>
+            <ion-grid [fixed]="true">
+              <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col size="auto">
+                  <ion-chip *ngIf="sleepiness_data.loggedValue >= 6" id="high-sleepiness" (click)="presentInfo(sleepiness_data.loggedValue)">
+                    <ion-icon name="battery-dead"></ion-icon>
+                    <ion-text>{{sleepiness_data.loggedValue}}</ion-text>
+                  </ion-chip>
+                  <ion-chip *ngIf="sleepiness_data.loggedValue >= 3 && sleepiness_data.loggedValue <= 5" id="med-sleepiness" (click)="presentInfo(sleepiness_data.loggedValue)">
+                    <ion-icon name="battery-half"></ion-icon>
+                    <ion-text>{{sleepiness_data.loggedValue}}</ion-text>
+                  </ion-chip>
+                  <ion-chip *ngIf="sleepiness_data.loggedValue <= 2" id="low-sleepiness" (click)="presentInfo(sleepiness_data.loggedValue)">
+                    <ion-icon name="battery-full"></ion-icon>
+                    <ion-text>{{sleepiness_data.loggedValue}}</ion-text>
+                  </ion-chip>
+                </ion-col>
+                
+                <ion-col size="auto">
+                  <ion-text id="date"><p>{{sleepiness_data.dateString()}}</p></ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+
+      <ion-item-options>
+        <ion-item-option id="item-option" (click)="remove(sleepiness_data)" class="bg-transparent">
+          <ion-icon slot="icon-only" color="primary" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button id="open-new-entry-modal" expand="block">
+      <ion-icon name="add" color="white"></ion-icon>
+    </ion-fab-button>    
+  </ion-fab>
+
+  <ion-modal trigger="open-new-entry-modal" [initialBreakpoint]="0.7" [breakpoints]="[0, 0.7]">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-button id="confirm" (click)="confirm()" slot="end">
+            <ion-icon name="checkmark"></ion-icon>
+          </ion-button>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-card class="ion-text-center ion-padding">
+          <ion-card-header>
+            <ion-card-title>How sleepy are you right now?</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+
+        <ion-range [(ngModel)]="loggedValue" [ticks]="true" [snaps]="true" [min]="1" [max]="7" [pin]="true" [pinFormatter]="pinFormatter">
+          <ion-icon name="sunny" slot="start"></ion-icon>
+          <ion-icon name="moon" slot="end"></ion-icon>
+        </ion-range>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Sleep Timer</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Start and stop a sleep timer -->
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Log Your Night's Sleep</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Start a sleep timer before you go to bed, and end it when you wake up
+    </ion-card-content>
+  </ion-card>
+
+  <div id="container">
+    <ion-card class="ion-padding">
+      <ion-card-content>
+        <ion-text id="timer">{{time()}}</ion-text>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-button *ngIf="!is_running" id="start" (click)="start()">Start</ion-button>
+    <ion-button *ngIf="is_running" id="stop" (click)="stop()">Stop</ion-button>
+
+    <ion-card *ngIf="last_logged_data">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row><ion-col>
+            <ion-text>Your last logged sleep:</ion-text>
+          </ion-col></ion-row>
+
+          <ion-row><ion-col>
+            <!-- <ion-chip [color]="(last_logged_data.elapsed / (1000*60*60) < 8) ? 'warning' : 'success'">
+              <ion-icon name="time"></ion-icon>
+              <ion-text id="duration">{{last_logged_data.summaryString()}}</ion-text>
+            </ion-chip> -->
+            <ion-chip id="below-recommended" *ngIf="last_logged_data.elapsed / (1000*60*60) < 8">
+              <ion-icon name="time"></ion-icon>
+              <ion-text>{{last_logged_data.summaryString()}}</ion-text>
+            </ion-chip>
+            <ion-chip id="above-recommended" *ngIf="last_logged_data.elapsed / (1000*60*60) >= 8">
+              <ion-icon name="time"></ion-icon>
+              <ion-text>{{last_logged_data.summaryString()}}</ion-text>
+            </ion-chip>
+          </ion-col></ion-row>
+
+          <ion-row><ion-col>
+            <ion-text id="date">{{last_logged_data.dateString()}}</ion-text>
+          </ion-col></ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>
